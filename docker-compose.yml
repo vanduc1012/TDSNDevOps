@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # mongodb:
+  #   image: mongo:7.0
+  #   container_name: cafe_mongodb
+  #   restart: always
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: admin123
+  #     MONGO_INITDB_DATABASE: cafe_db
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   networks:
+  #     - cafe-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cafe_backend
+    restart: always
+    environment:
+      MONGODB_URI: mongodb+srv://tranvanducqb1022_db_user:j0PmcXqTU2ArkLQ6@cluster0.talji12.mongodb.net/?appName=Cluster0
+      MONGODB_DATABASE: cafe_db
+    ports:
+      - "8080:8080"
+    networks:
+      - cafe-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cafe_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - cafe-network
+
+networks:
+  cafe-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
