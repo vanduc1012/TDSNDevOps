@@ -7,6 +7,56 @@ function Home() {
   const [district, setDistrict] = useState('');
   const [price, setPrice] = useState('');
   const [area, setArea] = useState('');
+  const [filteredPrice, setFilteredPrice] = useState('');
+  const [filteredCity, setFilteredCity] = useState('');
+  const [filteredDistrict, setFilteredDistrict] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+  
+  // Districts data by city
+  const districtsByCity = {
+    hcm: [
+      { value: 'quan1', label: 'Quận 1' },
+      { value: 'quan3', label: 'Quận 3' },
+      { value: 'quan7', label: 'Quận 7' },
+      { value: 'quan12', label: 'Quận 12' },
+      { value: 'binhthanh', label: 'Quận Bình Thạnh' },
+      { value: 'tanbinh', label: 'Quận Tân Bình' },
+      { value: 'phunhuan', label: 'Quận Phú Nhuận' },
+      { value: 'govap', label: 'Quận Gò Vấp' }
+    ],
+    hanoi: [
+      { value: 'caugiay', label: 'Quận Cầu Giấy' },
+      { value: 'tayho', label: 'Quận Tây Hồ' },
+      { value: 'bactuliem', label: 'Huyện Bắc Từ Liêm' },
+      { value: 'dongda', label: 'Quận Đống Đa' },
+      { value: 'haibatrung', label: 'Quận Hai Bà Trưng' },
+      { value: 'hoankiem', label: 'Quận Hoàn Kiếm' },
+      { value: 'thanhxuan', label: 'Quận Thanh Xuân' },
+      { value: 'longbien', label: 'Quận Long Biên' }
+    ],
+    danang: [
+      { value: 'haichau', label: 'Quận Hải Châu' },
+      { value: 'thanhkhe', label: 'Quận Thanh Khê' },
+      { value: 'sontra', label: 'Quận Sơn Trà' },
+      { value: 'nguhanhson', label: 'Quận Ngũ Hành Sơn' },
+      { value: 'lienchieu', label: 'Quận Liên Chiểu' },
+      { value: 'camle', label: 'Quận Cẩm Lệ' },
+      { value: 'hoavang', label: 'Huyện Hòa Vang' }
+    ]
+  };
+  
+  // Get districts for selected city
+  const getDistrictsForCity = (cityValue) => {
+    return districtsByCity[cityValue] || [];
+  };
+  
+  // Handle city change
+  const handleCityChange = (e) => {
+    const newCity = e.target.value;
+    setCity(newCity);
+    setDistrict(''); // Reset district when city changes
+  };
   
   // Banner carousel state
   const banners = [
@@ -18,6 +68,580 @@ function Home() {
     '/images/banners/banner6.jpg'
   ];
   const [currentBannerIndex, setCurrentBannerIndex] = useState(0);
+  
+  // Listings data
+  const allListings = [
+    {
+      id: 1,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh1.jpg',
+      imageCount: 8,
+      alt: 'Hot 2025!! Cho thuê phòng trọ sinh viên ĐH Công Nghiệp CS3',
+      title: 'Hot 2025!! Cho thuê phòng trọ sinh viên ĐH Công Nghiệp CS3 - Ninh Bình (Hà Nam cũ)',
+      description: '- Nhà trọ mới, đẹp, khép kín, thoáng mát, sạch sẽ, tiện nghi- Điện nước giá nhà nước, công tơ riêng từng phòng, chủ động theo dõi (Điện nước giá dân)-...',
+      author: '👤 Bác Duyết',
+      date: '🕒 2 tháng',
+      price: 1.8,
+      priceText: '1.8 Triệu/Tháng',
+      area: 16,
+      areaText: '16 m²',
+      location: 'Thành Phố Phủ Lý, Hà Nam',
+      city: '',
+      district: ''
+    },
+    {
+      id: 2,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh2.jpg',
+      imageCount: 4,
+      alt: 'Phòng trọ T5 Chung Thang Bộ với chủ',
+      title: 'Phòng trọ T5 Chung Thang Bộ với chủ 3 triệu/30m2 Điện Nước giá Nhà Nước',
+      description: 'Phòng trọ Xuân Đỉnh tầng 5 chung thang bộ với chủ nhà, gần công viên Hòa Bình 3 triệu/30m2, điện-nước giá nhà nước Cho TỐI ĐA 2 NGƯỜI (+ 1 TRẺ EM)...',
+      author: '👤 ĐỖ ANH LỢI',
+      date: '🕒 29/07/2025',
+      price: 3,
+      priceText: '3 Triệu/Tháng',
+      area: 30,
+      areaText: '30 m²',
+      location: 'Huyện Bắc Từ Liêm, Hà Nội',
+      city: 'hanoi',
+      district: 'bactuliem'
+    },
+    {
+      id: 3,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh3.jpg',
+      imageCount: 4,
+      alt: 'Cho NỮ thuê 02 căn Studio trống sẵn tại Vạn Xuân Villa Riverview',
+      title: 'Cho NỮ thuê 02 căn Studio trống sẵn tại Vạn Xuân Villa Riverview 3Tr',
+      description: '👉 Cho NỮ thuê 02 căn Studio tại VẠN XUÂN VILLA RIVERVIEW 💰 3Tr Chủ thân thiện dễ tính, giá thật tình CHỐT, TẾT KHÔNG TÍNH TIỀN, Free Dịch VỤ 03...',
+      author: '👤 Mr Phúc',
+      date: '🕒 20/12/2024',
+      price: 3,
+      priceText: '3 Triệu/Tháng',
+      area: 30,
+      areaText: '30 m²',
+      location: 'Quận 12, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan12'
+    },
+    {
+      id: 4,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh4.jpg',
+      imageCount: 6,
+      alt: 'Chính chủ cần cho thuê căn hộ tòa v3 - Home city 177 Trung Kính',
+      title: 'Chính chủ cần cho thuê căn hộ tòa v3 - Home city 177 Trung Kính trung tâm Cầu Giấy',
+      description: 'Chính chủ nhà mình cần cho thuê căn hộ 1402 - V3 Home city 177 Trung Kính vị trí đắc địa gần tòa Keangnam, đại học Phương Đông, THCS Cầu Giấy. Diện...',
+      author: '👤 HOÀNG ĐỖ',
+      date: '🕒',
+      price: 16,
+      priceText: '16 Triệu/Tháng',
+      area: 69,
+      areaText: '69 m²',
+      location: 'Quận Cầu Giấy, Hà Nội',
+      city: 'hanoi',
+      district: 'caugiay'
+    },
+    {
+      id: 5,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh5.jpg',
+      imageCount: 5,
+      alt: 'cho thuê căn hộ 75m2 ngay phố đi bộ Q.1',
+      title: 'cho thuê căn hộ 75m2 ngay phố đi bộ Q.1',
+      description: 'Địa Chỉ : 39/11 Mạc Thị Bưởi, phường Bến Nghé, Quận 1. >>> Căn Hộ Nằm Trong Hẻm Ngay Ngã 4 Mạc Thị Bưởi – Đồng Khởi Khu Vực Trung Tâm Quận 1, Sau...',
+      author: '👤 Bao Tran',
+      date: '🕒 1 năm',
+      price: 8,
+      priceText: '8 Triệu/Tháng',
+      area: 75,
+      areaText: '75 m²',
+      location: 'Quận 1, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan1'
+    },
+    {
+      id: 6,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh6.jpg',
+      imageCount: 3,
+      alt: 'Cho thuê nhà 5 tầng – ngõ ô tô tránh, vỉa hè rộng – 282 Lạc Long Quân',
+      title: 'Cho thuê nhà 5 tầng – ngõ ô tô tránh, vỉa hè rộng – 282 Lạc Long Quân',
+      description: 'CHO THUÊ NHÀ 5 TẦNG – NGÕ Ô TÔ RỘNG, CÓ VỈA HÈ – 282 LẠC LONG QUÂN, PHƯỜNG TÂY HỒ, HÀ NỘI. Vị trí cực đẹp: Cách mặt nước Hồ Tây chỉ 50m, nhà 2...',
+      author: '👤 Hoàng Gia Nguyễn',
+      date: '🕒 3 ngày',
+      price: null, // Thoả thuận
+      priceText: 'Thoả thuận Triệu/Tháng',
+      area: 36,
+      areaText: '36 m²',
+      location: 'Quận Tây Hồ, Hà Nội',
+      city: 'hanoi',
+      district: 'tayho'
+    },
+    {
+      id: 7,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh7.jpg',
+      imageCount: 7,
+      alt: 'Cho thuê phòng trọ đẹp, tiện nghi, giá rẻ',
+      title: 'Cho thuê phòng trọ đẹp, tiện nghi, giá rẻ tại trung tâm thành phố',
+      description: 'Phòng trọ mới xây, đầy đủ tiện nghi, gần trường học, bệnh viện, chợ. Điện nước giá dân, wifi miễn phí, an ninh tốt. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Nguyễn Văn A',
+      date: '🕒 5 ngày',
+      price: 2.5,
+      priceText: '2.5 Triệu/Tháng',
+      area: 25,
+      areaText: '25 m²',
+      location: 'Quận 1, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan1'
+    },
+    {
+      id: 8,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh8.jpg',
+      imageCount: 8,
+      alt: 'Cho thuê căn hộ studio hiện đại, view đẹp',
+      title: 'Cho thuê căn hộ studio hiện đại, view đẹp, nội thất đầy đủ',
+      description: 'Căn hộ studio mới, nội thất đầy đủ, view đẹp, gần trung tâm thương mại, siêu thị. Phù hợp cho người đi làm, cặp đôi. Giá cả hợp lý, chủ nhà dễ tính...',
+      author: '👤 Trần Thị B',
+      date: '🕒 1 tuần',
+      price: 5,
+      priceText: '5 Triệu/Tháng',
+      area: 35,
+      areaText: '35 m²',
+      location: 'Quận 3, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan3'
+    },
+    {
+      id: 9,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh9.jpg',
+      imageCount: 9,
+      alt: 'Cho thuê nhà nguyên căn 2 tầng, sân vườn rộng',
+      title: 'Cho thuê nhà nguyên căn 2 tầng, sân vườn rộng, thoáng mát',
+      description: 'Nhà nguyên căn 2 tầng, 3 phòng ngủ, 2 phòng tắm, sân vườn rộng, thoáng mát. Gần trường học, bệnh viện, chợ. Phù hợp cho gia đình có trẻ nhỏ...',
+      author: '👤 Lê Văn C',
+      date: '🕒 2 tuần',
+      price: 12,
+      priceText: '12 Triệu/Tháng',
+      area: 80,
+      areaText: '80 m²',
+      location: 'Quận 7, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan7'
+    },
+    {
+      id: 10,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh10.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ giá rẻ Quận 1',
+      title: 'Cho thuê phòng trọ giá rẻ Quận 1, gần trung tâm',
+      description: 'Phòng trọ sạch sẽ, thoáng mát, có điều hòa, wifi miễn phí. Gần chợ, siêu thị, bệnh viện. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Nguyễn Thị D',
+      date: '🕒 1 ngày',
+      price: 1.5,
+      priceText: '1.5 Triệu/Tháng',
+      area: 20,
+      areaText: '20 m²',
+      location: 'Quận 1, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan1'
+    },
+    {
+      id: 11,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh11.jpg',
+      imageCount: 6,
+      alt: 'Cho thuê phòng trọ Quận 3',
+      title: 'Cho thuê phòng trọ Quận 3, đường rộng, xe máy vào được',
+      description: 'Phòng trọ mới, có gác lửng, điều hòa, nóng lạnh. Gần trường học, bệnh viện. Điện nước giá dân, wifi miễn phí...',
+      author: '👤 Trần Văn E',
+      date: '🕒 3 ngày',
+      price: 2.2,
+      priceText: '2.2 Triệu/Tháng',
+      area: 22,
+      areaText: '22 m²',
+      location: 'Quận 3, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan3'
+    },
+    {
+      id: 12,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh12.jpg',
+      imageCount: 4,
+      alt: 'Cho thuê căn hộ mini Quận 7',
+      title: 'Cho thuê căn hộ mini Quận 7, nội thất đầy đủ',
+      description: 'Căn hộ mini mới, nội thất đầy đủ, có ban công, view đẹp. Gần trung tâm thương mại, siêu thị. Phù hợp cho cặp đôi...',
+      author: '👤 Lê Thị F',
+      date: '🕒 4 ngày',
+      price: 4.5,
+      priceText: '4.5 Triệu/Tháng',
+      area: 32,
+      areaText: '32 m²',
+      location: 'Quận 7, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan7'
+    },
+    {
+      id: 13,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh13.jpg',
+      imageCount: 7,
+      alt: 'Cho thuê nhà nguyên căn Hà Nội',
+      title: 'Cho thuê nhà nguyên căn 3 tầng, ngõ rộng, ô tô vào được',
+      description: 'Nhà nguyên căn 3 tầng, 4 phòng ngủ, 3 phòng tắm, sân thượng. Gần trường học, bệnh viện. Phù hợp cho gia đình...',
+      author: '👤 Phạm Văn G',
+      date: '🕒 5 ngày',
+      price: 15,
+      priceText: '15 Triệu/Tháng',
+      area: 100,
+      areaText: '100 m²',
+      location: 'Quận Cầu Giấy, Hà Nội',
+      city: 'hanoi',
+      district: 'caugiay'
+    },
+    {
+      id: 14,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh14.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ Hà Nội',
+      title: 'Cho thuê phòng trọ Quận Tây Hồ, view hồ đẹp',
+      description: 'Phòng trọ view hồ, thoáng mát, có điều hòa, nóng lạnh. Gần công viên, khu vui chơi. Phù hợp cho người đi làm...',
+      author: '👤 Hoàng Thị H',
+      date: '🕒 6 ngày',
+      price: 2.8,
+      priceText: '2.8 Triệu/Tháng',
+      area: 28,
+      areaText: '28 m²',
+      location: 'Quận Tây Hồ, Hà Nội',
+      city: 'hanoi',
+      district: 'tayho'
+    },
+    {
+      id: 15,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh15.jpg',
+      imageCount: 6,
+      alt: 'Cho thuê căn hộ Đà Nẵng',
+      title: 'Cho thuê căn hộ Đà Nẵng, gần biển',
+      description: 'Căn hộ gần biển, view đẹp, nội thất đầy đủ. Gần bãi biển, nhà hàng, khách sạn. Phù hợp cho du lịch, nghỉ dưỡng...',
+      author: '👤 Võ Văn I',
+      date: '🕒 1 tuần',
+      price: 6,
+      priceText: '6 Triệu/Tháng',
+      area: 40,
+      areaText: '40 m²',
+      location: 'Quận Sơn Trà, Đà Nẵng',
+      city: 'danang',
+      district: 'sontra'
+    },
+    {
+      id: 16,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh16.jpg',
+      imageCount: 4,
+      alt: 'Cho thuê phòng trọ Đà Nẵng',
+      title: 'Cho thuê phòng trọ Đà Nẵng, trung tâm thành phố',
+      description: 'Phòng trọ trung tâm, gần chợ, siêu thị, bệnh viện. Có điều hòa, wifi miễn phí. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Đặng Thị K',
+      date: '🕒 2 tuần',
+      price: 1.8,
+      priceText: '1.8 Triệu/Tháng',
+      area: 18,
+      areaText: '18 m²',
+      location: 'Quận Hải Châu, Đà Nẵng',
+      city: 'danang',
+      district: 'haichau'
+    },
+    {
+      id: 17,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh17.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ Quận 12',
+      title: 'Cho thuê phòng trọ Quận 12, giá rẻ, tiện nghi',
+      description: 'Phòng trọ giá rẻ, có điều hòa, nóng lạnh, wifi. Gần trường học, chợ. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Bùi Văn L',
+      date: '🕒 3 tuần',
+      price: 1.2,
+      priceText: '1.2 Triệu/Tháng',
+      area: 15,
+      areaText: '15 m²',
+      location: 'Quận 12, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan12'
+    },
+    {
+      id: 18,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh18.jpg',
+      imageCount: 8,
+      alt: 'Cho thuê căn hộ cao cấp Quận 1',
+      title: 'Cho thuê căn hộ cao cấp Quận 1, view đẹp',
+      description: 'Căn hộ cao cấp, nội thất sang trọng, có hồ bơi, gym. Gần trung tâm thương mại, nhà hàng. Phù hợp cho người đi làm...',
+      author: '👤 Ngô Thị M',
+      date: '🕒 1 tháng',
+      price: 18,
+      priceText: '18 Triệu/Tháng',
+      area: 85,
+      areaText: '85 m²',
+      location: 'Quận 1, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan1'
+    },
+    {
+      id: 19,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh19.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ Bình Thạnh',
+      title: 'Cho thuê phòng trọ Bình Thạnh, gần đại học',
+      description: 'Phòng trọ gần đại học, có điều hòa, wifi miễn phí. Gần chợ, siêu thị. Phù hợp cho sinh viên...',
+      author: '👤 Đỗ Văn N',
+      date: '🕒 2 tháng',
+      price: 1.6,
+      priceText: '1.6 Triệu/Tháng',
+      area: 19,
+      areaText: '19 m²',
+      location: 'Quận Bình Thạnh, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'binhthanh'
+    },
+    {
+      id: 20,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh20.jpg',
+      imageCount: 6,
+      alt: 'Cho thuê căn hộ Quận 3',
+      title: 'Cho thuê căn hộ Quận 3, nội thất đầy đủ',
+      description: 'Căn hộ mới, nội thất đầy đủ, có ban công. Gần trường học, bệnh viện. Phù hợp cho cặp đôi, gia đình nhỏ...',
+      author: '👤 Vũ Thị O',
+      date: '🕒 3 tháng',
+      price: 4.8,
+      priceText: '4.8 Triệu/Tháng',
+      area: 38,
+      areaText: '38 m²',
+      location: 'Quận 3, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan3'
+    },
+    {
+      id: 21,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh21.jpg',
+      imageCount: 4,
+      alt: 'Cho thuê phòng trọ Hà Nội',
+      title: 'Cho thuê phòng trọ Hà Nội, Quận Đống Đa',
+      description: 'Phòng trọ sạch sẽ, có điều hòa, nóng lạnh. Gần trường học, chợ. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Lý Văn P',
+      date: '🕒 4 tháng',
+      price: 2.3,
+      priceText: '2.3 Triệu/Tháng',
+      area: 24,
+      areaText: '24 m²',
+      location: 'Quận Đống Đa, Hà Nội',
+      city: 'hanoi',
+      district: 'dongda'
+    },
+    {
+      id: 22,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh22.jpg',
+      imageCount: 7,
+      alt: 'Cho thuê nhà nguyên căn Hà Nội',
+      title: 'Cho thuê nhà nguyên căn 2 tầng, Quận Hai Bà Trưng',
+      description: 'Nhà nguyên căn 2 tầng, 3 phòng ngủ, 2 phòng tắm. Gần trường học, bệnh viện. Phù hợp cho gia đình...',
+      author: '👤 Trương Thị Q',
+      date: '🕒 5 tháng',
+      price: 14,
+      priceText: '14 Triệu/Tháng',
+      area: 95,
+      areaText: '95 m²',
+      location: 'Quận Hai Bà Trưng, Hà Nội',
+      city: 'hanoi',
+      district: 'haibatrung'
+    },
+    {
+      id: 23,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh23.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê căn hộ Đà Nẵng',
+      title: 'Cho thuê căn hộ Đà Nẵng, Quận Thanh Khê',
+      description: 'Căn hộ mới, nội thất đầy đủ, có ban công. Gần chợ, siêu thị. Phù hợp cho cặp đôi...',
+      author: '👤 Phan Văn R',
+      date: '🕒 6 tháng',
+      price: 5.5,
+      priceText: '5.5 Triệu/Tháng',
+      area: 42,
+      areaText: '42 m²',
+      location: 'Quận Thanh Khê, Đà Nẵng',
+      city: 'danang',
+      district: 'thanhkhe'
+    },
+    {
+      id: 24,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh24.jpg',
+      imageCount: 6,
+      alt: 'Cho thuê phòng trọ Quận 7',
+      title: 'Cho thuê phòng trọ Quận 7, giá rẻ',
+      description: 'Phòng trọ giá rẻ, có điều hòa, wifi. Gần chợ, siêu thị. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Hồ Thị S',
+      date: '🕒 1 tuần',
+      price: 1.9,
+      priceText: '1.9 Triệu/Tháng',
+      area: 21,
+      areaText: '21 m²',
+      location: 'Quận 7, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan7'
+    },
+    {
+      id: 25,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh25.jpg',
+      imageCount: 4,
+      alt: 'Cho thuê căn hộ Quận 1',
+      title: 'Cho thuê căn hộ Quận 1, trung tâm',
+      description: 'Căn hộ trung tâm, nội thất đầy đủ. Gần trung tâm thương mại, nhà hàng. Phù hợp cho người đi làm...',
+      author: '👤 Tôn Văn T',
+      date: '🕒 2 tuần',
+      price: 7.5,
+      priceText: '7.5 Triệu/Tháng',
+      area: 50,
+      areaText: '50 m²',
+      location: 'Quận 1, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan1'
+    },
+    {
+      id: 26,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh26.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ Hà Nội',
+      title: 'Cho thuê phòng trọ Hà Nội, Quận Hoàn Kiếm',
+      description: 'Phòng trọ gần hồ Hoàn Kiếm, có điều hòa, wifi. Gần trường học, chợ. Phù hợp cho sinh viên...',
+      author: '👤 Đinh Thị U',
+      date: '🕒 3 tuần',
+      price: 2.5,
+      priceText: '2.5 Triệu/Tháng',
+      area: 26,
+      areaText: '26 m²',
+      location: 'Quận Hoàn Kiếm, Hà Nội',
+      city: 'hanoi',
+      district: 'hoankiem'
+    },
+    {
+      id: 27,
+      vip: 'vip-5',
+      vipLevel: 'VIP 5',
+      image: '/images/room/anh27.jpg',
+      imageCount: 8,
+      alt: 'Cho thuê căn hộ cao cấp Đà Nẵng',
+      title: 'Cho thuê căn hộ cao cấp Đà Nẵng, view biển',
+      description: 'Căn hộ cao cấp view biển, nội thất sang trọng. Gần bãi biển, nhà hàng. Phù hợp cho du lịch, nghỉ dưỡng...',
+      author: '👤 Vương Văn V',
+      date: '🕒 1 tháng',
+      price: 9,
+      priceText: '9 Triệu/Tháng',
+      area: 60,
+      areaText: '60 m²',
+      location: 'Quận Sơn Trà, Đà Nẵng',
+      city: 'danang',
+      district: 'sontra'
+    },
+    {
+      id: 28,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh28.jpg',
+      imageCount: 5,
+      alt: 'Cho thuê phòng trọ Quận Bình Thạnh',
+      title: 'Cho thuê phòng trọ Quận Bình Thạnh, giá rẻ',
+      description: 'Phòng trọ giá rẻ, có điều hòa, wifi. Gần chợ, siêu thị. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Lưu Thị W',
+      date: '🕒 2 tháng',
+      price: 1.4,
+      priceText: '1.4 Triệu/Tháng',
+      area: 17,
+      areaText: '17 m²',
+      location: 'Quận Bình Thạnh, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'binhthanh'
+    },
+    {
+      id: 29,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh29.jpg',
+      imageCount: 6,
+      alt: 'Cho thuê căn hộ Quận 3',
+      title: 'Cho thuê căn hộ Quận 3, nội thất đầy đủ',
+      description: 'Căn hộ mới, nội thất đầy đủ, có ban công. Gần trường học, bệnh viện. Phù hợp cho cặp đôi...',
+      author: '👤 Châu Văn X',
+      date: '🕒 3 tháng',
+      price: 4.2,
+      priceText: '4.2 Triệu/Tháng',
+      area: 36,
+      areaText: '36 m²',
+      location: 'Quận 3, Hồ Chí Minh',
+      city: 'hcm',
+      district: 'quan3'
+    },
+    {
+      id: 30,
+      vip: 'vip-4',
+      vipLevel: 'VIP 4',
+      image: '/images/room/anh30.jpg',
+      imageCount: 4,
+      alt: 'Cho thuê phòng trọ Hà Nội',
+      title: 'Cho thuê phòng trọ Hà Nội, Quận Thanh Xuân',
+      description: 'Phòng trọ sạch sẽ, có điều hòa, nóng lạnh. Gần trường học, chợ. Phù hợp cho sinh viên, công nhân...',
+      author: '👤 Mai Thị Y',
+      date: '🕒 4 tháng',
+      price: 2.1,
+      priceText: '2.1 Triệu/Tháng',
+      area: 23,
+      areaText: '23 m²',
+      location: 'Quận Thanh Xuân, Hà Nội',
+      city: 'hanoi',
+      district: 'thanhxuan'
+    }
+  ];
   
   // Auto-play banner carousel
   useEffect(() => {
@@ -40,9 +664,87 @@ function Home() {
     setCurrentBannerIndex(index);
   };
 
+  // Filter listings by price
+  const filterListingsByPrice = (listings, priceFilter) => {
+    if (!priceFilter) return listings;
+    
+    return listings.filter(listing => {
+      if (listing.price === null) return false; // Skip "Thoả thuận"
+      
+      switch(priceFilter) {
+        case '1-2':
+          return listing.price >= 1 && listing.price <= 2;
+        case '2-3':
+          return listing.price > 2 && listing.price <= 3;
+        case '3-5':
+          return listing.price > 3 && listing.price <= 5;
+        case '5+':
+          return listing.price > 5;
+        default:
+          return true;
+      }
+    });
+  };
+
+  // Filter listings by city and district
+  const filterListingsByLocation = (listings, cityFilter, districtFilter) => {
+    let filtered = listings;
+    
+    // Filter by city
+    if (cityFilter) {
+      filtered = filtered.filter(listing => listing.city === cityFilter);
+    }
+    
+    // Filter by district
+    if (districtFilter) {
+      filtered = filtered.filter(listing => listing.district === districtFilter);
+    }
+    
+    return filtered;
+  };
+
+  // Get filtered listings
+  const listingsFilteredByLocation = filterListingsByLocation(allListings, filteredCity, filteredDistrict);
+  const filteredListings = filterListingsByPrice(listingsFilteredByLocation, filteredPrice);
+  
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredPrice, filteredCity, filteredDistrict]);
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredListings.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentListings = filteredListings.slice(startIndex, endIndex);
+  
+  // Pagination handlers
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
-    // TODO: Implement search functionality
+    // Apply all filters
+    setFilteredPrice(price);
+    setFilteredCity(city);
+    setFilteredDistrict(district);
+    setCurrentPage(1); // Reset to first page when searching
     console.log('Search:', { searchType, city, district, price, area });
   };
 
@@ -63,7 +765,7 @@ function Home() {
           </select>
           <select 
             value={city} 
-            onChange={(e) => setCity(e.target.value)}
+            onChange={handleCityChange}
             className="search-select"
           >
             <option value="">Tỉnh, thành phố</option>
@@ -75,8 +777,14 @@ function Home() {
             value={district} 
             onChange={(e) => setDistrict(e.target.value)}
             className="search-select"
+            disabled={!city}
           >
             <option value="">Quận, huyện</option>
+            {getDistrictsForCity(city).map((districtOption) => (
+              <option key={districtOption.value} value={districtOption.value}>
+                {districtOption.label}
+              </option>
+            ))}
           </select>
           <select 
             value={price} 
@@ -117,6 +825,9 @@ function Home() {
             src={banners[currentBannerIndex]} 
             alt={`Banner ${currentBannerIndex + 1}`} 
             className="banner-image"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
             onError={(e) => {
               // Fallback nếu không có ảnh
               e.target.style.display = 'none';
@@ -180,143 +891,80 @@ function Home() {
           </div>
 
           {/* Listings */}
-          <div className="listing-card">
-            <div className="listing-badge vip vip-4">VIP 4</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">8</span>
-            </div>
-            <div className="listing-content">
-              <h3>Hot 2025!! Cho thuê phòng trọ sinh viên ĐH Công Nghiệp CS3 - Ninh Bình (Hà Nam cũ)</h3>
-              <p className="listing-description">
-                - Nhà trọ mới, đẹp, khép kín, thoáng mát, sạch sẽ, tiện nghi- Điện nước giá nhà nước, công tơ riêng từng phòng, chủ động theo dõi (Điện nước giá dân)-...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 Bác Duyết</span>
-                <span className="listing-date">🕒 2 tháng</span>
+          {currentListings.length > 0 ? (
+            currentListings.map((listing) => (
+              <div key={listing.id} className="listing-card">
+                <div className={`listing-badge vip ${listing.vip}`}>{listing.vipLevel}</div>
+                <div className="listing-image-wrapper">
+                  <div className="listing-image">
+                    <img src={listing.image} alt={listing.alt} />
+                  </div>
+                  <span className="listing-image-count">{listing.imageCount}</span>
+                </div>
+                <div className="listing-content">
+                  <h3>{listing.title}</h3>
+                  <p className="listing-description">{listing.description}</p>
+                  <div className="listing-meta">
+                    <span className="listing-author">{listing.author}</span>
+                    <span className="listing-date">{listing.date}</span>
+                  </div>
+                  <div className="listing-footer">
+                    <span className="listing-price">{listing.priceText}</span>
+                    <span className="listing-area">{listing.areaText}</span>
+                    <span className="listing-location">{listing.location}</span>
+                  </div>
+                </div>
               </div>
-              <div className="listing-footer">
-                <span className="listing-price">1.8 Triệu/Tháng</span>
-                <span className="listing-area">16 m²</span>
-                <span className="listing-location">Thành Phố Phủ Lý, Hà Nam</span>
-              </div>
+            ))
+          ) : (
+            <div className="no-results">
+              <p>Không tìm thấy kết quả phù hợp với tiêu chí tìm kiếm của bạn.</p>
             </div>
-          </div>
+          )}
 
-          <div className="listing-card">
-            <div className="listing-badge vip vip-4">VIP 4</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">4</span>
+          {/* Pagination */}
+          {filteredListings.length > 0 && totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                className="pagination-btn" 
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+              >
+                «
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                // Show first page, last page, current page, and pages around current
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      className={`pagination-btn ${currentPage === page ? 'active' : ''}`}
+                      onClick={() => handlePageChange(page)}
+                      aria-label={`Go to page ${page}`}
+                    >
+                      {page}
+                    </button>
+                  );
+                } else if (page === currentPage - 2 || page === currentPage + 2) {
+                  return <span key={page} className="pagination-ellipsis">...</span>;
+                }
+                return null;
+              })}
+              <button 
+                className="pagination-btn" 
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                aria-label="Next page"
+              >
+                »
+              </button>
             </div>
-            <div className="listing-content">
-              <h3>Phòng trọ T5 Chung Thang Bộ với chủ 3 triệu/30m2 Điện Nước giá Nhà Nước</h3>
-              <p className="listing-description">
-                Phòng trọ Xuân Đỉnh tầng 5 chung thang bộ với chủ nhà, gần công viên Hòa Bình 3 triệu/30m2, điện-nước giá nhà nước Cho TỐI ĐA 2 NGƯỜI (+ 1 TRẺ EM)...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 ĐỖ ANH LỢI</span>
-                <span className="listing-date">🕒 29/07/2025</span>
-              </div>
-              <div className="listing-footer">
-                <span className="listing-price">3 Triệu/Tháng</span>
-                <span className="listing-area">30 m²</span>
-                <span className="listing-location">Huyện Bắc Từ Liêm, Hà Nội</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="listing-card">
-            <div className="listing-badge vip vip-4">VIP 4</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">4</span>
-            </div>
-            <div className="listing-content">
-              <h3>Cho NỮ thuê 02 căn Studio trống sẵn tại Vạn Xuân Villa Riverview 3Tr</h3>
-              <p className="listing-description">
-                👉 Cho NỮ thuê 02 căn Studio tại VẠN XUÂN VILLA RIVERVIEW 💰 3Tr Chủ thân thiện dễ tính, giá thật tình CHỐT, TẾT KHÔNG TÍNH TIỀN, Free Dịch VỤ 03...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 Mr Phúc</span>
-                <span className="listing-date">🕒 20/12/2024</span>
-              </div>
-              <div className="listing-footer">
-                <span className="listing-price">3 Ngàn/tháng</span>
-                <span className="listing-area">30 m²</span>
-                <span className="listing-location">Quận 12, Hồ Chí Minh</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="listing-card">
-            <div className="listing-badge vip vip-4">VIP 4</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">6</span>
-            </div>
-            <div className="listing-content">
-              <h3>Chính chủ cần cho thuê căn hộ tòa v3 - Home city 177 Trung Kính trung tâm Cầu Giấy</h3>
-              <p className="listing-description">
-                Chính chủ nhà mình cần cho thuê căn hộ 1402 - V3 Home city 177 Trung Kính vị trí đắc địa gần tòa Keangnam, đại học Phương Đông, THCS Cầu Giấy. Diện...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 HOÀNG ĐỖ</span>
-                <span className="listing-date">🕒</span>
-              </div>
-              <div className="listing-footer">
-                <span className="listing-price">16 Triệu/Tháng</span>
-                <span className="listing-area">69 m²</span>
-                <span className="listing-location">Quận Cầu Giấy, Hà Nội</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="listing-card">
-            <div className="listing-badge vip vip-4">VIP 4</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">5</span>
-            </div>
-            <div className="listing-content">
-              <h3>cho thuê căn hộ 75m2 ngay phố đi bộ Q.1</h3>
-              <p className="listing-description">
-                Địa Chỉ : 39/11 Mạc Thị Bưởi, phường Bến Nghé, Quận 1. >>> Căn Hộ Nằm Trong Hẻm Ngay Ngã 4 Mạc Thị Bưởi – Đồng Khởi Khu Vực Trung Tâm Quận 1, Sau...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 Bao Tran</span>
-                <span className="listing-date">🕒 1 năm</span>
-              </div>
-              <div className="listing-footer">
-                <span className="listing-price">8 Triệu/Tháng</span>
-                <span className="listing-area">75 m²</span>
-                <span className="listing-location">Quận 1, Hồ Chí Minh</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="listing-card">
-            <div className="listing-badge vip vip-5">VIP 5</div>
-            <div className="listing-image-wrapper">
-              <div className="listing-image"></div>
-              <span className="listing-image-count">3</span>
-            </div>
-            <div className="listing-content">
-              <h3>Cho thuê nhà 5 tầng – ngõ ô tô tránh, vỉa hè rộng – 282 Lạc Long Quân</h3>
-              <p className="listing-description">
-                CHO THUÊ NHÀ 5 TẦNG – NGÕ Ô TÔ RỘNG, CÓ VỈA HÈ – 282 LẠC LONG QUÂN, PHƯỜNG TÂY HỒ, HÀ NỘI. Vị trí cực đẹp: Cách mặt nước Hồ Tây chỉ 50m, nhà 2...
-              </p>
-              <div className="listing-meta">
-                <span className="listing-author">👤 Hoàng Gia Nguyễn</span>
-                <span className="listing-date">🕒 3 ngày</span>
-              </div>
-              <div className="listing-footer">
-                <span className="listing-price">Thoả thuận Triệu/Tháng</span>
-                <span className="listing-area">36 m²</span>
-                <span className="listing-location">Quận Tây Hồ, Hà Nội</span>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="content-sidebar">
