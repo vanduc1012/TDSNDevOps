@@ -1,0 +1,6 @@
+# Connection String 1 (Database của thành viên nhóm)
+mongodb+srv://trantiennt2019_db_user:27042004@cluster0.sotowsp.mongodb.net/cafe_db?retryWrites=true&w=majority
+
+# Connection String 2 (Database backup)
+mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/cafe_db?retryWrites=true&w=majority
+

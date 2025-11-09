@@ -12,10 +12,8 @@ export const authService = {
 
   register: async (userData) => {
     const response = await api.post('/auth/register', userData);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data));
-    }
+    // Không tự động lưu token khi đăng ký, để user phải đăng nhập
+    // Token sẽ được lưu khi user đăng nhập
     return response.data;
   },
 

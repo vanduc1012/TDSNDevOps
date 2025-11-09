@@ -7,7 +7,13 @@ services:
     container_name: cafe_backend
     restart: always
     environment:
-      MONGODB_URI: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/?appName=Cluster0"
+      # Connection String đang sử dụng (có thể thay đổi giữa 2 options bên dưới)
+      # Option 1: Database của thành viên nhóm (Đang sử dụng)
+      MONGODB_URI: "mongodb+srv://trantiennt2019_db_user:27042004@cluster0.sotowsp.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
+      # Option 2: Database backup (Để chuyển sang, thay thế dòng MONGODB_URI ở trên bằng dòng này)
+      # MONGODB_URI: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
+      # Connection String 2 (Backup - chỉ để tham khảo)
+      MONGODB_URI_2: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
       MONGODB_DATABASE: cafe_db
       SPRING_PROFILES_ACTIVE: prod
       JAVA_OPTS: "-Xmx512m -Xms256m"
@@ -43,7 +49,7 @@ services:
     networks:
       - cafe-network
     environment:
-      - REACT_APP_API_URL=http://localhost:8080/api
+      - REACT_APP_API_URL=/api
       - NODE_ENV=production
     deploy:
       resources:

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { authService } from '../api/services';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
   const [phone, setPhone] = useState('');
@@ -8,6 +8,7 @@ function Login() {
   const [captcha, setCaptcha] = useState('');
   const [captchaCode, setCaptchaCode] = useState(generateCaptcha());
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   function generateCaptcha() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -31,11 +32,15 @@ function Login() {
       return;
     }
     try {
-      // Sử dụng phone làm username tạm thời (backend vẫn dùng username)
-      await authService.login(phone, password);
-      window.location.href = '/';
+      // Sử dụng số điện thoại (bỏ +84 nếu có) làm username
+      const username = phone.replace(/^\+84/, '');
+      const response = await authService.login(username, password);
+      if (response.token) {
+        // Đăng nhập thành công, chuyển đến trang chủ
+        navigate('/');
+      }
     } catch (err) {
-      setError('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
+      setError(err.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
       refreshCaptcha();
     }
   };

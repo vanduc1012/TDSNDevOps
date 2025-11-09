@@ -10,24 +10,8 @@ function Register() {
     email: '',
     phone: '',
   });
-  const [verificationCode, setVerificationCode] = useState('');
-  const [captcha, setCaptcha] = useState('');
-  const [captchaCode, setCaptchaCode] = useState(generateCaptcha());
   const [error, setError] = useState('');
-
-  function generateCaptcha() {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < 4; i++) {
-      result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-  }
-
-  const refreshCaptcha = () => {
-    setCaptchaCode(generateCaptcha());
-    setCaptcha('');
-  };
+  const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -35,31 +19,64 @@ function Register() {
 
   const handlePhoneChange = (e) => {
     let value = e.target.value;
-    // Tự động thêm +84 nếu chưa có
-    if (value && !value.startsWith('+84')) {
-      value = '+84' + value.replace(/^\+84/, '');
-    }
+    // Chỉ lưu số, không lưu +84 trong state
+    value = value.replace(/\D/g, ''); // Chỉ giữ lại số
     setFormData({ ...formData, phone: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (captcha.toLowerCase() !== captchaCode.toLowerCase()) {
-      setError('Mã xác nhận không đúng. Vui lòng thử lại.');
-      refreshCaptcha();
-      return;
-    }
+    setError(''); // Clear previous error
+    setSuccess(false); // Clear previous success
     try {
-      // Sử dụng phone làm username nếu không có username
+      // Sử dụng số điện thoại làm username (phone đã không có +84)
       const submitData = {
-        ...formData,
-        username: formData.username || formData.phone.replace(/^\+84/, ''),
+        username: formData.username || formData.phone,
+        password: formData.password,
+        fullName: formData.fullName,
+        email: formData.email || '',
+        phone: '+84' + formData.phone, // Thêm +84 khi gửi lên server
       };
-      await authService.register(submitData);
-      window.location.href = '/';
+      const response = await authService.register(submitData);
+      if (response.token) {
+        // Đăng ký thành công, hiển thị thông báo và KHÔNG tự động chuyển trang
+        setSuccess(true);
+        // Xóa form sau khi đăng ký thành công (tùy chọn)
+        // setFormData({ username: '', password: '', fullName: '', email: '', phone: '' });
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Đăng ký thất bại');
-      refreshCaptcha();
+      console.error('Registration error:', err);
+      // Xử lý các loại lỗi khác nhau
+      if (err.response) {
+        // Lỗi từ server
+        const errorMessage = err.response.data?.message || err.response.data?.error || err.response.data;
+        if (typeof errorMessage === 'string') {
+          // Kiểm tra nếu là lỗi trùng thông tin
+          if (errorMessage.includes('already exists') || 
+              errorMessage.includes('đã tồn tại') ||
+              errorMessage.includes('Username already exists') ||
+              errorMessage.includes('Email already exists')) {
+            if (errorMessage.includes('Username')) {
+              setError('Số điện thoại này đã được sử dụng. Vui lòng sử dụng số điện thoại khác.');
+            } else if (errorMessage.includes('Email')) {
+              setError('Email này đã được sử dụng. Vui lòng sử dụng email khác.');
+            } else {
+              setError('Thông tin đã tồn tại trong hệ thống. Vui lòng kiểm tra lại.');
+            }
+          } else {
+            setError(errorMessage);
+          }
+        } else {
+          setError('Đăng ký thất bại. Vui lòng thử lại.');
+        }
+      } else if (err.request) {
+        // Không nhận được response từ server
+        console.error('Network error:', err.request);
+        setError('Không thể kết nối đến server. Vui lòng thử lại sau.');
+      } else {
+        // Lỗi khác
+        setError('Đăng ký thất bại. Vui lòng thử lại.');
+      }
     }
   };
 
@@ -76,11 +93,9 @@ function Register() {
       <div className="login-wrapper">
         <div className="login-form-section">
           <h2 className="login-title">Tạo tài khoản mới đăng tin</h2>
-          <p className="register-instruction">
-            Bạn sẽ nhận được mã xác nhận gửi đến Email đăng ký để kích hoạt tài khoản
-          </p>
           <form className="auth-form" onSubmit={handleSubmit}>
             {error && <div className="alert alert-error">{error}</div>}
+            {success && <div className="alert alert-success">Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.</div>}
             <div className="form-group">
               <label>Họ tên của bạn(*)</label>
               <input
@@ -109,8 +124,9 @@ function Register() {
                 <input
                   type="tel"
                   name="phone"
-                  value={formData.phone.replace(/^\+84/, '')}
+                  value={formData.phone}
                   onChange={handlePhoneChange}
+                  placeholder="Nhập số điện thoại"
                   required
                   className="phone-input"
                 />
@@ -125,32 +141,6 @@ function Register() {
                 onChange={handleChange}
                 required
               />
-            </div>
-            <div className="form-group">
-              <label>Mã xác nhận</label>
-              <input
-                type="text"
-                placeholder="Mã xác nhận"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-              />
-            </div>
-            <div className="form-group">
-              <label>Captcha</label>
-              <div className="captcha-group">
-                <input
-                  type="text"
-                  placeholder="Captcha"
-                  value={captcha}
-                  onChange={(e) => setCaptcha(e.target.value)}
-                  required
-                  style={{ flex: 1 }}
-                />
-                <div className="captcha-display" onClick={refreshCaptcha}>
-                  <span>{captchaCode}</span>
-                  <span className="captcha-refresh">🔄</span>
-                </div>
-              </div>
             </div>
             <div className="form-actions">
               <button type="submit" className="btn btn-primary btn-register-account">

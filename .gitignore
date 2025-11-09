@@ -1,0 +1,20 @@
+# Environment variables
+.env
+.env.local
+.env.production
+
+# MongoDB connection strings (chứa password)
+*_CONNECTION.txt
+*_connection.txt
+MONGODB_COMPASS_CONNECTION.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+

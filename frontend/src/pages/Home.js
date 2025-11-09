@@ -8,11 +8,11 @@ function Home() {
   return (
     <div className="container">
       <div className="card" style={{ textAlign: 'center' }}>
-        <h1 style={{ fontSize: '2.5rem', color: '#6f4e37', marginBottom: '1rem' }}>
-          ☕ Chào mừng đến với Quán Cafe
+        <h1 style={{ fontSize: '2.5rem', color: '#1e88e5', marginBottom: '1rem' }}>
+          🏠 Chào mừng đến với Alonhatro
         </h1>
         <p style={{ fontSize: '1.25rem', color: '#666', marginBottom: '2rem' }}>
-          Hệ thống quản lý quán cafe hiện đại và tiện lợi
+          Nền tảng tìm kiếm và cho thuê phòng trọ uy tín
         </p>
 
         <div className="grid" style={{ marginTop: '2rem' }}>
