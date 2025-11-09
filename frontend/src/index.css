@@ -114,9 +114,19 @@ code {
 .login-title {
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: #1e88e5;
   text-align: center;
+}
+
+.register-instruction {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 0.75rem;
+  background-color: #f0f7ff;
+  border-radius: 4px;
 }
 
 .auth-form {
@@ -235,6 +245,58 @@ code {
 
 .link-red:hover {
   text-decoration: underline;
+}
+
+.link-blue {
+  color: #1e88e5;
+  text-decoration: none;
+}
+
+.link-blue:hover {
+  text-decoration: underline;
+}
+
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.phone-prefix {
+  background-color: #f5f5f5;
+  padding: 0.75rem;
+  border-right: 1px solid #ddd;
+  color: #666;
+  font-weight: 500;
+}
+
+.phone-input {
+  flex: 1;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+.phone-input:focus {
+  outline: none;
+}
+
+.terms-text {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+.btn-register-account {
+  background-color: #1565c0;
+}
+
+.btn-register-account:hover {
+  background-color: #0d47a1;
 }
 
 .btn-facebook {
