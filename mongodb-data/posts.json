@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Cho thuê phòng trọ giá rẻ tại Quận 7",
+    "content": "Cho thuê phòng trọ giá rẻ, gần chợ, siêu thị. Phòng rộng rãi, đầy đủ tiện nghi.",
+    "status": "APPROVED",
+    "isSpam": false,
+    "isDuplicate": false,
+    "hasInappropriateImages": false,
+    "hasFakePrice": false,
+    "hasWrongAddress": false,
+    "createdAt": "2025-11-20T10:00:00",
+    "updatedAt": "2025-11-20T10:00:00"
+  },
+  {
+    "title": "Phòng trọ cao cấp view đẹp",
+    "content": "Phòng trọ cao cấp, view đẹp, yên tĩnh. Phù hợp cho người làm việc tại nhà.",
+    "status": "PENDING",
+    "isSpam": false,
+    "isDuplicate": false,
+    "hasInappropriateImages": false,
+    "hasFakePrice": false,
+    "hasWrongAddress": false,
+    "createdAt": "2025-11-21T10:00:00",
+    "updatedAt": "2025-11-21T10:00:00"
+  },
+  {
+    "title": "Cho thuê phòng trọ cho sinh viên",
+    "content": "Cho thuê phòng trọ giá rẻ cho sinh viên, gần các trường đại học.",
+    "status": "APPROVED",
+    "isSpam": false,
+    "isDuplicate": false,
+    "hasInappropriateImages": false,
+    "hasFakePrice": false,
+    "hasWrongAddress": false,
+    "createdAt": "2025-11-19T10:00:00",
+    "updatedAt": "2025-11-19T10:00:00"
+  }
+]
+

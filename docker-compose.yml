@@ -4,23 +4,23 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: cafe_backend
+    container_name: quanlytro_backend
     restart: always
     environment:
       # Connection String đang sử dụng (có thể thay đổi giữa 2 options bên dưới)
       # Option 1: Database của thành viên nhóm (Đang sử dụng)
-      MONGODB_URI: "mongodb+srv://trantiennt2019_db_user:27042004@cluster0.sotowsp.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
+      MONGODB_URI: "mongodb+srv://trantiennt2019_db_user:27042004@cluster0.sotowsp.mongodb.net/quanlytro_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
       # Option 2: Database backup (Để chuyển sang, thay thế dòng MONGODB_URI ở trên bằng dòng này)
-      # MONGODB_URI: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
+      # MONGODB_URI: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/quanlytro_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
       # Connection String 2 (Backup - chỉ để tham khảo)
-      MONGODB_URI_2: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/cafe_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
-      MONGODB_DATABASE: cafe_db
+      MONGODB_URI_2: "mongodb+srv://tranvanducqb1022_db_user:HbQrOcg6aqkIdlEd@cluster0.talji12.mongodb.net/quanlytro_db?retryWrites=true&w=majority&tls=true&appName=Cluster0"
+      MONGODB_DATABASE: quanlytro_db
       SPRING_PROFILES_ACTIVE: prod
       JAVA_OPTS: "-Xmx512m -Xms256m"
     ports:
       - "8080:8080"
     networks:
-      - cafe-network
+      - quanlytro-network
     healthcheck:
       test: ["CMD-SHELL", "java -version || exit 1"]
       interval: 30s
@@ -40,14 +40,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: cafe_frontend
+    container_name: quanlytro_frontend
     restart: always
     ports:
       - "3000:80"
     depends_on:
       - backend
     networks:
-      - cafe-network
+      - quanlytro-network
     environment:
       - REACT_APP_API_URL=/api
       - NODE_ENV=production
@@ -61,10 +61,10 @@ services:
           memory: 256M
 
 networks:
-  cafe-network:
+  quanlytro-network:
     driver: bridge
-    name: cafe-network
+    name: quanlytro-network
 
 volumes:
   mongodb_data:
-    name: cafe_mongodb_data
+    name: quanlytro_mongodb_data

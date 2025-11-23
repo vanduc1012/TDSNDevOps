@@ -1,0 +1,23 @@
+{
+  "name": "quanlytro-management-backend",
+  "version": "1.0.0",
+  "description": "Quản Lý Trọ System Backend - Spring Boot Application",
+  "scripts": {
+    "dev": "mvn spring-boot:run",
+    "start": "mvn spring-boot:run",
+    "start:jar": "java -jar target/quanlytro-management-1.0.0.jar",
+    "build": "mvn clean package -DskipTests",
+    "build:run": "mvn clean package -DskipTests && java -jar target/quanlytro-management-1.0.0.jar",
+    "test": "mvn test",
+    "clean": "mvn clean",
+    "install": "mvn clean install -DskipTests"
+  },
+  "keywords": [
+    "spring-boot",
+    "java",
+    "maven"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

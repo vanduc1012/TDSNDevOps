@@ -3,7 +3,7 @@ import { authService } from '../api/services';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
-  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captcha, setCaptcha] = useState('');
   const [captchaCode, setCaptchaCode] = useState(generateCaptcha());
@@ -32,12 +32,15 @@ function Login() {
       return;
     }
     try {
-      // Sử dụng số điện thoại (bỏ +84 nếu có) làm username
-      const username = phone.replace(/^\+84/, '');
       const response = await authService.login(username, password);
       if (response.token) {
-        // Đăng nhập thành công, chuyển đến trang chủ
-        navigate('/');
+        // Đăng nhập thành công, chuyển đến trang phù hợp
+        const user = authService.getCurrentUser();
+        if (user && user.role === 'ADMIN') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
@@ -61,14 +64,17 @@ function Login() {
           <form className="auth-form" onSubmit={handleSubmit}>
             {error && <div className="alert alert-error">{error}</div>}
             <div className="form-group">
-              <label>Số điện thoại (*)</label>
+              <label>Tên đăng nhập (*)</label>
               <input
-                type="tel"
-                placeholder="Nhập số điện thoại"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                type="text"
+                placeholder="Nhập tên đăng nhập (VD: root)"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
+              <small style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.25rem', display: 'block' }}>
+                Tài khoản admin mặc định: root / root123
+              </small>
             </div>
             <div className="form-group">
               <label>Nhập mật khẩu (*)</label>

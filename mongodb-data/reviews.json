@@ -1,0 +1,21 @@
+[
+  {
+    "rating": 5,
+    "comment": "Phòng rất đẹp, đầy đủ tiện nghi. Chủ trọ rất nhiệt tình và hỗ trợ tốt.",
+    "createdAt": "2025-11-20T10:00:00",
+    "updatedAt": "2025-11-20T10:00:00"
+  },
+  {
+    "rating": 4,
+    "comment": "Phòng ổn, giá cả hợp lý. Vị trí thuận tiện, gần chợ và siêu thị.",
+    "createdAt": "2025-11-18T10:00:00",
+    "updatedAt": "2025-11-18T10:00:00"
+  },
+  {
+    "rating": 5,
+    "comment": "Rất hài lòng với dịch vụ. Phòng sạch sẽ, an ninh tốt.",
+    "createdAt": "2025-11-15T10:00:00",
+    "updatedAt": "2025-11-15T10:00:00"
+  }
+]
+

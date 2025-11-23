@@ -5,6 +5,8 @@ import PrivateRoute from './components/PrivateRoute';
 import Login from './components/Login';
 import Register from './components/Register';
 import Home from './pages/Home';
+import AdminDashboard from './pages/AdminDashboard';
+import RoomManagement from './pages/RoomManagement';
 import MenuManagement from './pages/MenuManagement';
 import TableManagement from './pages/TableManagement';
 import OrderManagement from './pages/OrderManagement';
@@ -27,7 +29,8 @@ function App() {
           <Route path="/book-table" element={<PrivateRoute><BookTable /></PrivateRoute>} />
           <Route path="/my-orders" element={<PrivateRoute><MyOrders /></PrivateRoute>} />
           
-          <Route path="/admin/menu" element={<PrivateRoute adminOnly={true}><MenuManagement /></PrivateRoute>} />
+          <Route path="/admin" element={<PrivateRoute adminOnly={true}><AdminDashboard /></PrivateRoute>} />
+          <Route path="/admin/rooms" element={<PrivateRoute adminOnly={true}><RoomManagement /></PrivateRoute>} />
           <Route path="/admin/menu" element={<PrivateRoute adminOnly={true}><MenuManagement /></PrivateRoute>} />
           <Route path="/admin/tables" element={<PrivateRoute adminOnly={true}><TableManagement /></PrivateRoute>} />
           <Route path="/admin/orders" element={<PrivateRoute adminOnly={true}><OrderManagement /></PrivateRoute>} />

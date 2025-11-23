@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { menuService } from '../api/services';
 
 function MenuManagement() {
@@ -75,8 +76,13 @@ function MenuManagement() {
   return (
     <div className="container">
       <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2>Quản Lý Menu</h2>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <div>
+            <Link to="/admin" style={{ color: '#666', textDecoration: 'none', marginRight: '1rem' }}>
+              ← Quay lại Trang Quản Trị
+            </Link>
+            <h2 style={{ marginTop: '0.5rem' }}>Quản Lý Sản Phẩm/Dịch Vụ</h2>
+          </div>
           <button
             className="btn btn-primary"
             onClick={() => {
@@ -84,7 +90,7 @@ function MenuManagement() {
               setShowModal(true);
             }}
           >
-            + Thêm Món Mới
+            + Thêm Sản Phẩm/Dịch Vụ Mới
           </button>
         </div>
 
@@ -92,7 +98,7 @@ function MenuManagement() {
           <table>
             <thead>
               <tr>
-                <th>Tên món</th>
+                <th>Tên sản phẩm/dịch vụ</th>
                 <th>Mô tả</th>
                 <th>Giá</th>
                 <th>Danh mục</th>
@@ -130,10 +136,10 @@ function MenuManagement() {
       {showModal && (
         <div className="modal-overlay">
           <div className="modal">
-            <h2>{editingItem ? 'Sửa Món' : 'Thêm Món Mới'}</h2>
+            <h2>{editingItem ? 'Sửa Sản Phẩm/Dịch Vụ' : 'Thêm Sản Phẩm/Dịch Vụ Mới'}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Tên món *</label>
+                <label>Tên sản phẩm/dịch vụ *</label>
                 <input
                   type="text"
                   value={formData.name}
@@ -164,7 +170,7 @@ function MenuManagement() {
                   type="text"
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  placeholder="VD: Cà phê, Trà, Sinh tố"
+                  placeholder="VD: Internet, Điện, Nước, Giặt ủi, Dọn phòng"
                 />
               </div>
               <div className="form-group">

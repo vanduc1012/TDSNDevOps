@@ -1,0 +1,53 @@
+[
+  {
+    "username": "root",
+    "name": "Root",
+    "fullName": "Root Administrator",
+    "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+    "email": "root@quanlytro.com",
+    "phone": "0123456789",
+    "role": "ADMIN",
+    "createdAt": "2025-11-20T00:00:00"
+  },
+  {
+    "username": "admin",
+    "name": "Admin",
+    "fullName": "Quản Trị Viên",
+    "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+    "email": "admin@quanlytro.com",
+    "phone": "0987654321",
+    "role": "ADMIN",
+    "createdAt": "2025-11-20T00:00:00"
+  },
+  {
+    "username": "user1",
+    "name": "Nguyễn Văn A",
+    "fullName": "Nguyễn Văn A",
+    "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+    "email": "user1@example.com",
+    "phone": "0912345678",
+    "role": "USER",
+    "createdAt": "2025-11-20T01:00:00"
+  },
+  {
+    "username": "user2",
+    "name": "Trần Thị B",
+    "fullName": "Trần Thị B",
+    "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+    "email": "user2@example.com",
+    "phone": "0923456789",
+    "role": "USER",
+    "createdAt": "2025-11-20T02:00:00"
+  },
+  {
+    "username": "landlord1",
+    "name": "Chủ Trọ 1",
+    "fullName": "Lê Văn C - Chủ Trọ",
+    "password": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
+    "email": "landlord1@example.com",
+    "phone": "0934567890",
+    "role": "USER",
+    "createdAt": "2025-11-20T03:00:00"
+  }
+]
+

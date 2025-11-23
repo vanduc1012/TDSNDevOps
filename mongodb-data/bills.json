@@ -1,0 +1,33 @@
+[
+  {
+    "month": "2025-11",
+    "electricity": 150.5,
+    "water": 20.0,
+    "description": "Hóa đơn điện nước tháng 11/2025",
+    "amount": 500000,
+    "paidStatus": false,
+    "createdAt": "2025-11-20T10:00:00",
+    "updatedAt": "2025-11-20T10:00:00"
+  },
+  {
+    "month": "2025-10",
+    "electricity": 120.0,
+    "water": 18.5,
+    "description": "Hóa đơn điện nước tháng 10/2025",
+    "amount": 420000,
+    "paidStatus": true,
+    "createdAt": "2025-10-20T10:00:00",
+    "updatedAt": "2025-10-25T10:00:00"
+  },
+  {
+    "month": "2025-09",
+    "electricity": 135.0,
+    "water": 19.0,
+    "description": "Hóa đơn điện nước tháng 9/2025",
+    "amount": 460000,
+    "paidStatus": true,
+    "createdAt": "2025-09-20T10:00:00",
+    "updatedAt": "2025-09-22T10:00:00"
+  }
+]
+

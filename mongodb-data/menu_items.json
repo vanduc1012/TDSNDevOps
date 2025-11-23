@@ -1,0 +1,67 @@
+[
+  {
+    "name": "Wifi tốc độ cao",
+    "description": "Wifi tốc độ cao, không giới hạn dung lượng",
+    "price": 100000,
+    "category": "Internet",
+    "imageUrl": "https://example.com/images/wifi.jpg",
+    "available": true
+  },
+  {
+    "name": "Điện",
+    "description": "Tiền điện theo số công tơ",
+    "price": 4000,
+    "category": "Tiện ích",
+    "imageUrl": "https://example.com/images/electricity.jpg",
+    "available": true
+  },
+  {
+    "name": "Nước",
+    "description": "Tiền nước theo số đồng hồ",
+    "price": 25000,
+    "category": "Tiện ích",
+    "imageUrl": "https://example.com/images/water.jpg",
+    "available": true
+  },
+  {
+    "name": "Giặt ủi",
+    "description": "Dịch vụ giặt ủi quần áo",
+    "price": 50000,
+    "category": "Dịch vụ",
+    "imageUrl": "https://example.com/images/laundry.jpg",
+    "available": true
+  },
+  {
+    "name": "Dọn phòng",
+    "description": "Dịch vụ dọn phòng định kỳ",
+    "price": 200000,
+    "category": "Dịch vụ",
+    "imageUrl": "https://example.com/images/cleaning.jpg",
+    "available": true
+  },
+  {
+    "name": "Bảo vệ 24/7",
+    "description": "Dịch vụ bảo vệ an ninh 24/7",
+    "price": 0,
+    "category": "An ninh",
+    "imageUrl": "https://example.com/images/security.jpg",
+    "available": true
+  },
+  {
+    "name": "Chỗ để xe",
+    "description": "Chỗ để xe máy, xe đạp",
+    "price": 200000,
+    "category": "Tiện ích",
+    "imageUrl": "https://example.com/images/parking.jpg",
+    "available": true
+  },
+  {
+    "name": "Thang máy",
+    "description": "Tòa nhà có thang máy",
+    "price": 0,
+    "category": "Tiện ích",
+    "imageUrl": "https://example.com/images/elevator.jpg",
+    "available": true
+  }
+]
+

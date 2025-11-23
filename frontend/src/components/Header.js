@@ -42,12 +42,9 @@ function Header() {
           ) : (
             <>
               {isAdmin && (
-                <>
-                  <Link to="/admin/menu">Quản lý Menu</Link>
-                  <Link to="/admin/tables">Quản lý Bàn</Link>
-                  <Link to="/admin/orders">Quản lý Order</Link>
-                  <Link to="/admin/reports">Báo cáo</Link>
-                </>
+                <Link to="/admin" className="btn-header" style={{ background: '#4CAF50', color: '#fff' }}>
+                  <span>⚙️</span> Trang Quản Trị
+                </Link>
               )}
               {!isAdmin && (
                 <>
